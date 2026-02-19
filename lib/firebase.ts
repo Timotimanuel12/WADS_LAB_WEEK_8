@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,9 +15,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
+
 // Analytics check (prevents errors during SSR)
 if (typeof window !== "undefined") {
   isSupported().then((yes) => yes ? getAnalytics(app) : null);
 }
 
-export default app;
+export {app, auth};
