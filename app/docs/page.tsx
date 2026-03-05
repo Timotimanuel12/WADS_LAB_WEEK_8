@@ -1,9 +1,16 @@
-import SwaggerViewer from "@/components/SwaggerViewer";
+"use client";
 
-export default function DocsPage() {
+/**
+ * API docs are rendered in an iframe so Swagger UI runs outside the React tree.
+ * This avoids UNSAFE_componentWillReceiveProps warnings from swagger-ui-react.
+ */
+export default function ApiDocsPage() {
   return (
-    <main className="min-h-screen bg-white p-8">
-      <SwaggerViewer />
-    </main>
+    <iframe
+      src="/docs/swagger-ui"
+      title="API Documentation"
+      className="h-[calc(100vh-0px)] w-full border-0"
+      sandbox="allow-scripts allow-same-origin"
+    />
   );
 }
