@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,6 +15,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { LogOut, Loader2 } from "lucide-react";
 
 export default function LogoutButton() {
     const router = useRouter();
@@ -51,18 +51,38 @@ export default function LogoutButton() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive">Log out</Button>
+                <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150"
+                    style={{ background: "oklch(1 0 0 / 8%)", color: "oklch(1 0 0 / 60%)" }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.background = "oklch(0.577 0.245 27.325 / 20%)";
+                        e.currentTarget.style.color = "oklch(0.8 0.12 27)";
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.background = "oklch(1 0 0 / 8%)";
+                        e.currentTarget.style.color = "oklch(1 0 0 / 60%)";
+                    }}
+                >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Sign out</span>
+                </button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="rounded-2xl">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Sign out</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to sign out?
+                        Are you sure you want to sign out of TaskFlow?
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout} disabled={loading}>
+                    <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={handleLogout}
+                        disabled={loading}
+                        className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1.5" /> : null}
                         {loading ? "Signing out…" : "Yes, sign out"}
                     </AlertDialogAction>
                 </AlertDialogFooter>

@@ -3,11 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createTodo, updateTodo, deleteTodo } from "./actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -27,8 +22,11 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Pencil, Trash2, Plus } from "lucide-react";
+import { Loader2, Pencil, Trash2, Plus, CheckCircle2, Circle, ClipboardList, Sparkles } from "lucide-react";
 
 export type TodoItem = {
     id: string;
@@ -47,14 +45,12 @@ export function TodoList({ initialTodos }: TodoListProps) {
     const router = useRouter();
     const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
     const [isAdding, setIsAdding] = useState(false);
-
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     useEffect(() => {
         setTodos(initialTodos);
     }, [initialTodos]);
-
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -69,7 +65,7 @@ export function TodoList({ initialTodos }: TodoListProps) {
         try {
             const result = await createTodo(formData);
             if (result.success) {
-                toast.success("Todo added.");
+                toast.success("Task added!");
                 form.reset();
                 router.refresh();
             } else {
@@ -110,7 +106,7 @@ export function TodoList({ initialTodos }: TodoListProps) {
                 description: description?.trim() || null,
             });
             if (result.success) {
-                toast.success("Todo updated.");
+                toast.success("Task updated.");
                 setEditingId(null);
                 router.refresh();
             } else {
@@ -129,7 +125,7 @@ export function TodoList({ initialTodos }: TodoListProps) {
             const result = await deleteTodo(todoId);
             if (result.success) {
                 setTodos((prev) => prev.filter((t) => t.id !== todoId));
-                toast.success("Todo deleted.");
+                toast.success("Task deleted.");
                 setDeletingId(null);
                 router.refresh();
             } else {
@@ -142,144 +138,268 @@ export function TodoList({ initialTodos }: TodoListProps) {
         }
     };
 
+    const completedCount = todos.filter((t) => t.completed).length;
+    const totalCount = todos.length;
+    const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
     return (
-        <div className="space-y-6">
-            <div>
-                <h2 className="text-2xl font-bold tracking-tight">My Todo List</h2>
-                <p className="text-muted-foreground">
-                    Add, edit, and complete your tasks.
-                </p>
+        <div className="max-w-2xl mx-auto space-y-6">
+            {/* Page Header */}
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: "linear-gradient(135deg, oklch(0.55 0.22 280), oklch(0.65 0.24 310))" }}>
+                    <ClipboardList className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight" style={{ color: "oklch(0.15 0.04 280)" }}>My Todo List</h1>
+                    <p className="text-sm" style={{ color: "oklch(0.5 0.05 280)" }}>Add, edit, and complete your tasks.</p>
+                </div>
             </div>
 
-            <Card className="shadow-sm">
-                <CardHeader className="pb-3">
-                    <h3 className="font-semibold">Add a new todo</h3>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleCreate} className="flex flex-col gap-4 sm:flex-row sm:items-end">
-                        <div className="flex-1 space-y-2">
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                id="title"
-                                name="title"
-                                placeholder="What needs to be done?"
-                                required
-                                maxLength={500}
-                                disabled={isAdding}
-                                className="h-10"
-                            />
+            {/* Progress bar (only when there are todos) */}
+            {totalCount > 0 && (
+                <div className="rounded-2xl p-5 border"
+                    style={{
+                        background: "oklch(1 0 0)",
+                        border: "1px solid oklch(0.88 0.02 280)",
+                        boxShadow: "0 2px 12px oklch(0.55 0.22 280 / 6%)",
+                    }}>
+                    <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-semibold" style={{ color: "oklch(0.3 0.08 280)" }}>
+                            Progress
+                        </span>
+                        <span className="text-sm font-bold" style={{ color: "oklch(0.55 0.22 280)" }}>
+                            {completedCount} / {totalCount} done
+                        </span>
+                    </div>
+                    <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: "oklch(0.88 0.02 280)" }}>
+                        <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                                width: `${progress}%`,
+                                background: "linear-gradient(90deg, oklch(0.55 0.22 280), oklch(0.65 0.24 310))",
+                            }}
+                        />
+                    </div>
+                    {progress === 100 && (
+                        <div className="flex items-center gap-1.5 mt-3 text-sm font-semibold"
+                            style={{ color: "oklch(0.55 0.22 280)" }}>
+                            <Sparkles className="w-4 h-4" />
+                            All tasks complete! Great job!
                         </div>
-                        <div className="flex-1 space-y-2 sm:max-w-xs">
-                            <Label htmlFor="description">Description (optional)</Label>
-                            <Input
-                                id="description"
-                                name="description"
-                                placeholder="Add details…"
-                                maxLength={1000}
-                                disabled={isAdding}
-                                className="h-10"
-                            />
-                        </div>
-                        <Button type="submit" disabled={isAdding} className="h-10 shrink-0">
-                            {isAdding ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Adding…
-                                </>
-                            ) : (
-                                <>
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Add
-                                </>
-                            )}
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
-
-            <Card className="shadow-sm">
-                <CardHeader className="pb-3">
-                    <h3 className="font-semibold">Tasks</h3>
-                </CardHeader>
-                <CardContent>
-                    {todos.length === 0 ? (
-                        <p className="py-8 text-center text-sm text-muted-foreground">
-                            No todos yet. Add one above.
-                        </p>
-                    ) : (
-                        <ul className="space-y-3">
-                            {todos.map((todo) => (
-                                <li
-                                    key={todo.id}
-                                    className="flex flex-col gap-2 rounded-lg border bg-card p-4 transition-colors hover:bg-muted/30 sm:flex-row sm:items-center sm:gap-4"
-                                >
-                                    <div className="flex min-w-0 flex-1 items-start gap-3">
-                                        <Checkbox
-                                            id={`check-${todo.id}`}
-                                            checked={todo.completed}
-                                            onCheckedChange={() => handleToggleComplete(todo)}
-                                            className="mt-0.5 shrink-0"
-                                        />
-                                        <div className="min-w-0 flex-1">
-                                            <label
-                                                htmlFor={`check-${todo.id}`}
-                                                className={`cursor-pointer font-medium ${todo.completed ? "text-muted-foreground line-through" : ""
-                                                    }`}
-                                            >
-                                                {todo.title}
-                                            </label>
-                                            {todo.description && (
-                                                <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">
-                                                    {todo.description}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 sm:shrink-0">
-                                        <EditTodoDialog
-                                            todo={todo}
-                                            onSave={handleEdit}
-                                            isEditing={editingId === todo.id}
-                                            onOpenChange={(open) => !open && setEditingId(null)}
-                                        />
-                                        <AlertDialog
-                                            open={deletingId === todo.id}
-                                            onOpenChange={(open) => !open && setDeletingId(null)}
-                                        >
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Delete todo</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Are you sure you want to delete &quot;{todo.title}&quot;? This cannot be undone.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        onClick={() => handleDelete(todo.id)}
-                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                    >
-                                                        Delete
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                onClick={() => setDeletingId(todo.id)}
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                                <span className="sr-only">Delete</span>
-                                            </Button>
-                                        </AlertDialog>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
                     )}
-                </CardContent>
-            </Card>
+                </div>
+            )}
+
+            {/* Add todo form */}
+            <div className="rounded-2xl border overflow-hidden"
+                style={{
+                    background: "oklch(1 0 0)",
+                    border: "1px solid oklch(0.88 0.02 280)",
+                    boxShadow: "0 2px 12px oklch(0.55 0.22 280 / 6%)",
+                }}>
+                <div className="px-5 pt-5 pb-2">
+                    <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "oklch(0.5 0.05 280)" }}>
+                        Add a task
+                    </h2>
+                </div>
+                <form onSubmit={handleCreate} className="p-5 pt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
+                    <div className="flex-1 space-y-1.5">
+                        <Label htmlFor="title" className="text-xs font-medium" style={{ color: "oklch(0.4 0.06 280)" }}>
+                            Title <span style={{ color: "oklch(0.55 0.22 280)" }}>*</span>
+                        </Label>
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="What needs to be done?"
+                            required
+                            maxLength={500}
+                            disabled={isAdding}
+                            className="h-10 rounded-xl text-sm border-0 ring-1 focus-visible:ring-2 transition-all"
+                            style={{
+                                background: "oklch(0.97 0.01 280)",
+                                "--tw-ring-color": "oklch(0.88 0.02 280)",
+                            } as React.CSSProperties}
+                        />
+                    </div>
+                    <div className="flex-1 sm:max-w-xs space-y-1.5">
+                        <Label htmlFor="description" className="text-xs font-medium" style={{ color: "oklch(0.4 0.06 280)" }}>
+                            Description <span className="opacity-50">(optional)</span>
+                        </Label>
+                        <Input
+                            id="description"
+                            name="description"
+                            placeholder="Add details…"
+                            maxLength={1000}
+                            disabled={isAdding}
+                            className="h-10 rounded-xl text-sm border-0 ring-1 focus-visible:ring-2 transition-all"
+                            style={{
+                                background: "oklch(0.97 0.01 280)",
+                                "--tw-ring-color": "oklch(0.88 0.02 280)",
+                            } as React.CSSProperties}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={isAdding}
+                        className="h-10 px-5 rounded-xl text-sm font-semibold text-white flex items-center gap-2 shrink-0 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                            background: "linear-gradient(135deg, oklch(0.55 0.22 280), oklch(0.62 0.24 305))",
+                            boxShadow: "0 4px 16px oklch(0.55 0.22 280 / 30%)",
+                        }}
+                        onMouseEnter={e => !isAdding && (e.currentTarget.style.boxShadow = "0 6px 20px oklch(0.55 0.22 280 / 50%)")}
+                        onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 4px 16px oklch(0.55 0.22 280 / 30%)")}
+                    >
+                        {isAdding ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Plus className="w-4 h-4" />
+                        )}
+                        {isAdding ? "Adding…" : "Add"}
+                    </button>
+                </form>
+            </div>
+
+            {/* Todo list */}
+            <div className="rounded-2xl border overflow-hidden"
+                style={{
+                    background: "oklch(1 0 0)",
+                    border: "1px solid oklch(0.88 0.02 280)",
+                    boxShadow: "0 2px 12px oklch(0.55 0.22 280 / 6%)",
+                }}>
+                <div className="px-5 py-4 border-b flex items-center justify-between"
+                    style={{ borderColor: "oklch(0.93 0.015 280)" }}>
+                    <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "oklch(0.5 0.05 280)" }}>
+                        Tasks
+                    </h2>
+                    {totalCount > 0 && (
+                        <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                            style={{
+                                background: "oklch(0.55 0.22 280 / 10%)",
+                                color: "oklch(0.45 0.2 280)",
+                            }}>
+                            {totalCount}
+                        </span>
+                    )}
+                </div>
+
+                {todos.length === 0 ? (
+                    <div className="py-14 px-6 text-center">
+                        <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                            style={{ background: "oklch(0.55 0.22 280 / 8%)" }}>
+                            <ClipboardList className="w-6 h-6" style={{ color: "oklch(0.55 0.22 280 / 50%)" }} />
+                        </div>
+                        <p className="text-sm font-medium" style={{ color: "oklch(0.5 0.05 280)" }}>No tasks yet</p>
+                        <p className="text-xs mt-1" style={{ color: "oklch(0.65 0.03 280)" }}>Add your first task above to get started.</p>
+                    </div>
+                ) : (
+                    <ul className="divide-y" style={{ borderColor: "oklch(0.93 0.015 280)" }}>
+                        {todos.map((todo) => (
+                            <li
+                                key={todo.id}
+                                className="todo-item flex items-start gap-4 px-5 py-4"
+                            >
+                                {/* Checkbox toggle */}
+                                <button
+                                    type="button"
+                                    onClick={() => handleToggleComplete(todo)}
+                                    className="mt-0.5 shrink-0 transition-all duration-200"
+                                    aria-label={todo.completed ? "Mark incomplete" : "Mark complete"}
+                                >
+                                    {todo.completed ? (
+                                        <CheckCircle2
+                                            className="w-5 h-5"
+                                            style={{ color: "oklch(0.55 0.22 280)" }}
+                                        />
+                                    ) : (
+                                        <Circle
+                                            className="w-5 h-5"
+                                            style={{ color: "oklch(0.75 0.05 280)" }}
+                                        />
+                                    )}
+                                </button>
+
+                                {/* Content */}
+                                <div className="flex-1 min-w-0">
+                                    <p className={`font-medium text-sm leading-snug transition-all duration-200 ${
+                                        todo.completed ? "line-through" : ""
+                                    }`}
+                                        style={{
+                                            color: todo.completed
+                                                ? "oklch(0.65 0.03 280)"
+                                                : "oklch(0.18 0.04 280)",
+                                        }}>
+                                        {todo.title}
+                                    </p>
+                                    {todo.description && (
+                                        <p className="text-xs mt-0.5 line-clamp-2"
+                                            style={{ color: "oklch(0.58 0.04 280)" }}>
+                                            {todo.description}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Completed badge */}
+                                {todo.completed && (
+                                    <span className="shrink-0 hidden sm:inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full"
+                                        style={{
+                                            background: "oklch(0.55 0.22 280 / 10%)",
+                                            color: "oklch(0.45 0.2 280)",
+                                        }}>
+                                        Done
+                                    </span>
+                                )}
+
+                                {/* Actions */}
+                                <div className="flex items-center gap-1 shrink-0">
+                                    <EditTodoDialog
+                                        todo={todo}
+                                        onSave={handleEdit}
+                                        isEditing={editingId === todo.id}
+                                        onOpenChange={(open) => !open && setEditingId(null)}
+                                    />
+                                    <AlertDialog
+                                        open={deletingId === todo.id}
+                                        onOpenChange={(open) => !open && setDeletingId(null)}
+                                    >
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Delete task</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Are you sure you want to delete &quot;{todo.title}&quot;? This cannot be undone.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={() => handleDelete(todo.id)}
+                                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                >
+                                                    Delete
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                        <button
+                                            type="button"
+                                            className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:scale-105"
+                                            style={{
+                                                background: "oklch(0.577 0.245 27.325 / 0%)",
+                                                color: "oklch(0.6 0.1 27)",
+                                            }}
+                                            onMouseEnter={e => (e.currentTarget.style.background = "oklch(0.577 0.245 27.325 / 10%)")}
+                                            onMouseLeave={e => (e.currentTarget.style.background = "oklch(0.577 0.245 27.325 / 0%)")}
+                                            onClick={() => setDeletingId(todo.id)}
+                                            aria-label="Delete"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </AlertDialog>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }
@@ -313,19 +433,29 @@ function EditTodoDialog({
             }}
         >
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="shrink-0" disabled={isEditing}>
-                    <Pencil className="h-4 w-4" />
-                    <span className="sr-only">Edit</span>
-                </Button>
+                <button
+                    type="button"
+                    disabled={isEditing}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 hover:scale-105 disabled:opacity-50"
+                    style={{ background: "transparent", color: "oklch(0.55 0.08 280)" }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "oklch(0.55 0.22 280 / 10%)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                    aria-label="Edit"
+                >
+                    {isEditing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Pencil className="w-3.5 h-3.5" />}
+                </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md rounded-2xl">
                 <DialogHeader>
-                    <DialogTitle>Edit todo</DialogTitle>
-                    <DialogDescription>Change the title and description.</DialogDescription>
+                    <DialogTitle>Edit task</DialogTitle>
+                    <DialogDescription>Update the title and description.</DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="edit-title">Title</Label>
+                <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+                    <div className="space-y-1.5">
+                        <Label htmlFor="edit-title" className="text-xs font-semibold uppercase tracking-wider"
+                            style={{ color: "oklch(0.45 0.06 280)" }}>
+                            Title
+                        </Label>
                         <Input
                             id="edit-title"
                             value={title}
@@ -333,23 +463,36 @@ function EditTodoDialog({
                             placeholder="Title"
                             required
                             maxLength={500}
+                            className="rounded-xl h-10"
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="edit-description">Description (optional)</Label>
+                    <div className="space-y-1.5">
+                        <Label htmlFor="edit-description" className="text-xs font-semibold uppercase tracking-wider"
+                            style={{ color: "oklch(0.45 0.06 280)" }}>
+                            Description <span className="opacity-50 normal-case">(optional)</span>
+                        </Label>
                         <Input
                             id="edit-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Description"
                             maxLength={1000}
+                            className="rounded-xl h-10"
                         />
                     </div>
-                    <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                    <DialogFooter className="gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-xl">
                             Cancel
                         </Button>
-                        <Button type="submit">Save</Button>
+                        <Button
+                            type="submit"
+                            className="rounded-xl text-white"
+                            style={{
+                                background: "linear-gradient(135deg, oklch(0.55 0.22 280), oklch(0.62 0.24 305))",
+                            }}
+                        >
+                            Save changes
+                        </Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
