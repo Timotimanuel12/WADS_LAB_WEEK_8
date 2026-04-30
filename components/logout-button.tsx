@@ -24,19 +24,9 @@ export default function LogoutButton() {
     const handleLogout = async () => {
         try {
             setLoading(true);
-
-            // Clear Better Auth session (for users who signed in with email/password)
             await authClient.signOut();
-
-            // Clear custom session cookie (for users who signed in with Firebase/Google)
-            const res = await fetch("/api/logout", {
-                method: "POST",
-            });
-
-            if (!res.ok) {
-                throw new Error("Failed to clear session");
-            }
-
+            const res = await fetch("/api/logout", { method: "POST" });
+            if (!res.ok) throw new Error("Failed to clear session");
             toast.success("Successfully signed out");
             router.push("/login");
             router.refresh();
@@ -53,39 +43,57 @@ export default function LogoutButton() {
             <AlertDialogTrigger asChild>
                 <button
                     type="button"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150"
-                    style={{ background: "oklch(1 0 0 / 8%)", color: "oklch(1 0 0 / 60%)" }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.background = "oklch(0.577 0.245 27.325 / 20%)";
-                        e.currentTarget.style.color = "oklch(0.8 0.12 27)";
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.background = "oklch(1 0 0 / 8%)";
-                        e.currentTarget.style.color = "oklch(1 0 0 / 60%)";
-                    }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150 active:opacity-50"
+                    style={{ background: "rgba(255,59,48,0.12)" }}
+                    aria-label="Sign out"
                 >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Sign out</span>
+                    <LogOut className="w-4 h-4" style={{ color: "var(--ios-red)" }} />
                 </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="rounded-2xl">
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Sign out</AlertDialogTitle>
-                    <AlertDialogDescription>
+            <AlertDialogContent
+                className="rounded-[20px] border-none p-0 overflow-hidden max-w-[300px]"
+                style={{ background: "var(--ios-elevated)" }}
+            >
+                <AlertDialogHeader className="px-6 pt-6 pb-3 text-center">
+                    <AlertDialogTitle
+                        className="text-[17px] font-semibold"
+                        style={{ color: "var(--ios-label)" }}
+                    >
+                        Sign Out
+                    </AlertDialogTitle>
+                    <AlertDialogDescription
+                        className="text-[13px]"
+                        style={{ color: "var(--ios-label-2)" }}
+                    >
                         Are you sure you want to sign out of TaskFlow?
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+
+                {/* iOS-style button sheet */}
+                <div
+                    className="border-t"
+                    style={{ borderColor: "var(--ios-sep)" }}
+                >
                     <AlertDialogAction
                         onClick={handleLogout}
                         disabled={loading}
-                        className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        className="w-full h-12 rounded-none border-none text-[17px] font-semibold bg-transparent hover:bg-transparent shadow-none"
+                        style={{ color: "var(--ios-red)" }}
                     >
-                        {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1.5" /> : null}
-                        {loading ? "Signing out…" : "Yes, sign out"}
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Sign Out"}
                     </AlertDialogAction>
-                </AlertDialogFooter>
+                </div>
+                <div
+                    className="border-t"
+                    style={{ borderColor: "var(--ios-sep)" }}
+                >
+                    <AlertDialogCancel
+                        className="w-full h-12 rounded-none border-none text-[17px] font-semibold bg-transparent hover:bg-transparent shadow-none"
+                        style={{ color: "var(--ios-blue)" }}
+                    >
+                        Cancel
+                    </AlertDialogCancel>
+                </div>
             </AlertDialogContent>
         </AlertDialog>
     );

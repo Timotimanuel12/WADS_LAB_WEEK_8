@@ -4,40 +4,169 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─── iOS Design Token Palette ─────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --ios-bg:              #f2f2f7;
+  --ios-bg-2:            #ffffff;
+  --ios-bg-3:            #f2f2f7;
+  --ios-grouped-bg:      #f2f2f7;
+  --ios-elevated:        #ffffff;
+
+  /* Labels */
+  --ios-label:           #000000;
+  --ios-label-2:         rgba(60,60,67,0.6);
+  --ios-label-3:         rgba(60,60,67,0.3);
+  --ios-label-4:         rgba(60,60,67,0.18);
+
+  /* Fills */
+  --ios-fill:            rgba(120,120,128,0.2);
+  --ios-fill-2:          rgba(120,120,128,0.16);
+  --ios-fill-3:          rgba(118,118,128,0.12);
+  --ios-fill-4:          rgba(116,116,128,0.08);
+
+  /* Separators */
+  --ios-sep:             rgba(60,60,67,0.29);
+  --ios-sep-opaque:      #c6c6c8;
+
+  /* System Colors */
+  --ios-blue:            #007aff;
+  --ios-blue-mid:        rgba(0,122,255,0.14);
+  --ios-indigo:          #5856d6;
+  --ios-purple:          #af52de;
+  --ios-pink:            #ff2d55;
+  --ios-red:             #ff3b30;
+  --ios-orange:          #ff9500;
+  --ios-yellow:          #ffcc00;
+  --ios-green:           #34c759;
+  --ios-teal:            #30b0c7;
+  --ios-mint:            #00c7be;
+
+  /* Nav */
+  --ios-nav-bg:          rgba(242,242,247,0.85);
+  --ios-nav-border:      rgba(60,60,67,0.12);
+
+  /* Shadcn compat */
+  --radius: 0.75rem;
+  --background: #f2f2f7;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #007aff;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(120,120,128,0.12);
+  --secondary-foreground: rgba(60,60,67,0.6);
+  --muted: rgba(120,120,128,0.12);
+  --muted-foreground: rgba(60,60,67,0.6);
+  --accent: rgba(0,122,255,0.14);
+  --accent-foreground: #007aff;
+  --destructive: #ff3b30;
+  --border: rgba(60,60,67,0.18);
+  --input: rgba(120,120,128,0.12);
+  --ring: rgba(0,122,255,0.4);
+}
+
+.dark {
+  /* Backgrounds */
+  --ios-bg:              #000000;
+  --ios-bg-2:            #1c1c1e;
+  --ios-bg-3:            #2c2c2e;
+  --ios-grouped-bg:      #000000;
+  --ios-elevated:        #1c1c1e;
+
+  /* Labels */
+  --ios-label:           #ffffff;
+  --ios-label-2:         rgba(235,235,245,0.6);
+  --ios-label-3:         rgba(235,235,245,0.3);
+  --ios-label-4:         rgba(235,235,245,0.18);
+
+  /* Fills */
+  --ios-fill:            rgba(120,120,128,0.36);
+  --ios-fill-2:          rgba(120,120,128,0.32);
+  --ios-fill-3:          rgba(118,118,128,0.24);
+  --ios-fill-4:          rgba(116,116,128,0.18);
+
+  /* Separators */
+  --ios-sep:             rgba(84,84,88,0.65);
+  --ios-sep-opaque:      #38383a;
+
+  /* System Colors */
+  --ios-blue:            #0a84ff;
+  --ios-blue-mid:        rgba(10,132,255,0.2);
+  --ios-indigo:          #5e5ce6;
+  --ios-purple:          #bf5af2;
+  --ios-pink:            #ff375f;
+  --ios-red:             #ff453a;
+  --ios-orange:          #ff9f0a;
+  --ios-yellow:          #ffd60a;
+  --ios-green:           #30d158;
+  --ios-teal:            #40c8e0;
+  --ios-mint:            #63e6e2;
+
+  /* Nav */
+  --ios-nav-bg:          rgba(28,28,30,0.85);
+  --ios-nav-border:      rgba(255,255,255,0.08);
+
+  /* Shadcn compat */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #1c1c1e;
+  --card-foreground: #ffffff;
+  --popover: #1c1c1e;
+  --popover-foreground: #ffffff;
+  --primary: #0a84ff;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(120,120,128,0.32);
+  --secondary-foreground: rgba(235,235,245,0.6);
+  --muted: rgba(120,120,128,0.24);
+  --muted-foreground: rgba(235,235,245,0.6);
+  --accent: rgba(10,132,255,0.2);
+  --accent-foreground: #0a84ff;
+  --destructive: #ff453a;
+  --border: rgba(255,255,255,0.1);
+  --input: rgba(255,255,255,0.1);
+  --ring: rgba(10,132,255,0.5);
+}
+
+/* ─── Tailwind Theme Tokens ──────────────────────────────────────────────── */
 @theme inline {
+  --font-sans: var(--font-inter);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ios-bg: var(--ios-bg);
+  --color-ios-bg-2: var(--ios-bg-2);
+  --color-ios-bg-3: var(--ios-bg-3);
+  --color-ios-elevated: var(--ios-elevated);
+  --color-ios-label: var(--ios-label);
+  --color-ios-label-2: var(--ios-label-2);
+  --color-ios-label-3: var(--ios-label-3);
+  --color-ios-fill: var(--ios-fill);
+  --color-ios-fill-2: var(--ios-fill-2);
+  --color-ios-fill-3: var(--ios-fill-3);
+  --color-ios-sep: var(--ios-sep);
+  --color-ios-blue: var(--ios-blue);
+  --color-ios-blue-mid: var(--ios-blue-mid);
+  --color-ios-red: var(--ios-red);
+  --color-ios-green: var(--ios-green);
+  --color-ios-orange: var(--ios-orange);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -47,149 +176,189 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-:root {
-  --radius: 0.75rem;
-  /* Deep violet/purple light theme */
-  --background: oklch(0.98 0.005 280);
-  --foreground: oklch(0.15 0.02 280);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 280);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 280);
-  --primary: oklch(0.55 0.22 280);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.94 0.03 280);
-  --secondary-foreground: oklch(0.3 0.1 280);
-  --muted: oklch(0.94 0.02 280);
-  --muted-foreground: oklch(0.5 0.05 280);
-  --accent: oklch(0.9 0.06 280);
-  --accent-foreground: oklch(0.3 0.12 280);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.88 0.02 280);
-  --input: oklch(0.88 0.02 280);
-  --ring: oklch(0.55 0.22 280);
-  --chart-1: oklch(0.55 0.22 280);
-  --chart-2: oklch(0.65 0.18 320);
-  --chart-3: oklch(0.6 0.2 240);
-  --chart-4: oklch(0.75 0.15 180);
-  --chart-5: oklch(0.7 0.19 60);
-  --sidebar: oklch(0.96 0.01 280);
-  --sidebar-foreground: oklch(0.15 0.02 280);
-  --sidebar-primary: oklch(0.55 0.22 280);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.9 0.06 280);
-  --sidebar-accent-foreground: oklch(0.3 0.12 280);
-  --sidebar-border: oklch(0.88 0.02 280);
-  --sidebar-ring: oklch(0.55 0.22 280);
-}
-
-.dark {
-  --background: oklch(0.12 0.02 280);
-  --foreground: oklch(0.95 0.01 280);
-  --card: oklch(0.17 0.03 280);
-  --card-foreground: oklch(0.95 0.01 280);
-  --popover: oklch(0.17 0.03 280);
-  --popover-foreground: oklch(0.95 0.01 280);
-  --primary: oklch(0.65 0.22 280);
-  --primary-foreground: oklch(0.1 0.02 280);
-  --secondary: oklch(0.22 0.04 280);
-  --secondary-foreground: oklch(0.9 0.02 280);
-  --muted: oklch(0.22 0.03 280);
-  --muted-foreground: oklch(0.6 0.06 280);
-  --accent: oklch(0.28 0.06 280);
-  --accent-foreground: oklch(0.9 0.02 280);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.65 0.22 280);
-  --chart-1: oklch(0.65 0.22 280);
-  --chart-2: oklch(0.72 0.18 320);
-  --chart-3: oklch(0.68 0.2 240);
-  --chart-4: oklch(0.78 0.15 180);
-  --chart-5: oklch(0.75 0.19 60);
-  --sidebar: oklch(0.17 0.03 280);
-  --sidebar-foreground: oklch(0.95 0.01 280);
-  --sidebar-primary: oklch(0.65 0.22 280);
-  --sidebar-primary-foreground: oklch(0.1 0.02 280);
-  --sidebar-accent: oklch(0.28 0.06 280);
-  --sidebar-accent-foreground: oklch(0.9 0.02 280);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.65 0.22 280);
-}
-
+/* ─── Base Styles ────────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--ios-bg);
+    color: var(--ios-label);
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* ─── iOS Component Utilities ────────────────────────────────────────────── */
+
+/* Grouped inset list — like iOS Settings rows */
+.ios-list {
+  background: var(--ios-elevated);
+  border-radius: 16px;
+  overflow: hidden;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+.ios-list-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ios-sep);
+  transition: background 0.15s ease;
 }
-::-webkit-scrollbar-thumb {
-  background: oklch(0.55 0.22 280 / 40%);
-  border-radius: 99px;
+.ios-list-row:last-child {
+  border-bottom: none;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.55 0.22 280 / 70%);
+.ios-list-row:active {
+  background: var(--ios-fill-3);
 }
 
-/* Animated gradient bg for auth pages */
+/* iOS card surface */
+.ios-card {
+  background: var(--ios-elevated);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* iOS pill button */
+.ios-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  background: var(--ios-blue);
+  color: #fff;
+  border: none;
+}
+.ios-btn:active {
+  opacity: 0.75;
+  transform: scale(0.97);
+}
+.ios-btn-ghost {
+  background: transparent;
+  color: var(--ios-blue);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.ios-btn-ghost:active {
+  opacity: 0.5;
+}
+.ios-btn-destructive {
+  background: var(--ios-red);
+  color: #fff;
+}
+
+/* Nav blur */
+.ios-nav {
+  background: var(--ios-nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--ios-nav-border);
+}
+
+/* iOS input */
+.ios-input {
+  width: 100%;
+  background: var(--ios-fill-3);
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ios-label);
+  transition: box-shadow 0.2s ease;
+}
+.ios-input:focus {
+  box-shadow: 0 0 0 3px rgba(0,122,255,0.25);
+}
+.dark .ios-input:focus {
+  box-shadow: 0 0 0 3px rgba(10,132,255,0.3);
+}
+.ios-input::placeholder {
+  color: var(--ios-label-3);
+}
+
+/* Checkbox iOS-style */
+.ios-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ios-sep);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.ios-check.checked {
+  background: var(--ios-blue);
+  border-color: var(--ios-blue);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+@keyframes ios-spring-in {
+  0%   { opacity: 0; transform: scale(0.94) translateY(6px); }
+  60%  { opacity: 1; transform: scale(1.01) translateY(-1px); }
+  100% { transform: scale(1) translateY(0); }
+}
+@keyframes ios-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
+@keyframes quote-slide {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
+.animate-spring-in { animation: ios-spring-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-fade-up   { animation: ios-fade-up 0.3s ease both; }
+.quote-in          { animation: quote-slide 0.35s ease both; }
+
+/* Staggered children */
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--ios-fill);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ios-fill-2);
+}
+
+/* ─── Auth pages animated bg ────────────────────────────────────────────── */
 .animated-gradient-bg {
-  background: linear-gradient(
-    135deg,
-    oklch(0.14 0.04 280),
-    oklch(0.18 0.06 300),
-    oklch(0.14 0.05 260),
-    oklch(0.16 0.04 290)
-  );
+  background: linear-gradient(135deg, #1c1c1e, #2c2c2e, #1a1a2e, #16213e);
   background-size: 400% 400%;
-  animation: gradient-shift 10s ease infinite;
-}
-
-/* Glassmorphism card */
-.glass-card {
-  background: oklch(1 0 0 / 6%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid oklch(1 0 0 / 12%);
-}
-
-/* Shimmer animation for loading */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* Pulse ring */
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 oklch(0.65 0.22 280 / 40%); }
-  70% { box-shadow: 0 0 0 10px oklch(0.65 0.22 280 / 0%); }
-  100% { box-shadow: 0 0 0 0 oklch(0.65 0.22 280 / 0%); }
-}
-
-.pulse-ring {
-  animation: pulse-ring 2s ease-out infinite;
-}
-
-/* Smooth todo item hover */
-.todo-item {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.todo-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px oklch(0.55 0.22 280 / 12%);
+  animation: gradient-shift 12s ease infinite;
 }
